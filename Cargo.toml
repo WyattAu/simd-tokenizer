@@ -1,0 +1,27 @@
+[package]
+name = "simd-tokenizer"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+authors = ["Wyatt Au <wyatt_au@protonmail.com>"]
+license = "Apache-2.0"
+repository = "https://github.com/WyattAu/simd-tokenizer"
+homepage = "https://github.com/WyattAu/simd-tokenizer"
+documentation = "https://docs.rs/simd-tokenizer"
+description = "Safe SWAR-accelerated whitespace token estimator with an optional exact tiktoken (cl100k_base) backend."
+readme = "README.md"
+keywords = ["tokenizer", "tokens", "simd", "llm", "tiktoken"]
+categories = ["text-processing"]
+
+[features]
+default = []
+# Exact token counting via tiktoken-rs (cl100k_base). Off by default to keep
+# the dependency tree light; the SWAR estimator is always available.
+tiktoken = ["dep:tiktoken-rs"]
+
+[dependencies]
+thiserror = "2.0"
+tiktoken-rs = { version = "0.12", optional = true }
+
+[dev-dependencies]
+proptest = "1"
