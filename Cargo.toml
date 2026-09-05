@@ -23,5 +23,10 @@ tiktoken = ["dep:tiktoken-rs"]
 thiserror = "2.0"
 tiktoken-rs = { version = "0.12", optional = true }
 
+[[bench]]
+name = "count"
+harness = false
+
 [dev-dependencies]
 proptest = "1"
+criterion = { version = "0.5", features = ["html_reports"] }

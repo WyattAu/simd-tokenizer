@@ -85,3 +85,7 @@ simd-tokenizer = { version = "0.1", features = ["tiktoken"] }
 ## License
 
 Apache-2.0 (matching clawdius).
+
+## Performance
+
+Measured hot-path SLOs and allocation profile: [PERF-SLO.md](PERF-SLO.md). Benchmarks run in CI (non-gating regression visibility against the saved `ci` baseline).
