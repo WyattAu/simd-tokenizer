@@ -15,12 +15,15 @@ categories = ["text-processing"]
 
 [features]
 default = []
+# Core-only build: the SWAR estimator has no std usage.
+std = []
 # Exact token counting via tiktoken-rs (cl100k_base). Off by default to keep
 # the dependency tree light; the SWAR estimator is always available.
-tiktoken = ["dep:tiktoken-rs"]
+# tiktoken-rs is std-bound, so this implies `std`.
+tiktoken = ["dep:tiktoken-rs", "std"]
 
 [dependencies]
-thiserror = "2.0"
+thiserror = { version = "2.0", default-features = false }
 tiktoken-rs = { version = "0.12", optional = true }
 
 [[bench]]

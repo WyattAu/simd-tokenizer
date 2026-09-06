@@ -12,7 +12,7 @@
 
 use std::hint::black_box;
 
-use criterion::{Criterion, Throughput, criterion_group, criterion_main};
+use criterion::{criterion_group, criterion_main, Criterion, Throughput};
 use simd_tokenizer::{SimdWhitespaceTokenizer, TokenCounter};
 
 fn text_of(n_words: usize) -> String {
@@ -25,7 +25,9 @@ fn bench_count(c: &mut Criterion) {
     for n in [1usize, 100, 1000] {
         let text = text_of(n);
         group.throughput(Throughput::Bytes(text.len() as u64));
-        group.bench_function(format!("count_{n}w"), |b| b.iter(|| black_box(tok.count(black_box(&text)))));
+        group.bench_function(format!("count_{n}w"), |b| {
+            b.iter(|| black_box(tok.count(black_box(&text))))
+        });
     }
     group.finish();
 }
