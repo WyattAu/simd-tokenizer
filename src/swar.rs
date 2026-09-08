@@ -214,9 +214,7 @@ mod tests {
             "new\nlines\nhere",
         ];
         let long = "The quick brown fox jumps over the lazy dog. ".repeat(10);
-        let mut all_cases: Vec<&str> = cases.to_vec();
-        all_cases.push(&long);
-        for &case in &all_cases {
+        for case in cases.iter().copied().chain(core::iter::once(long.as_str())) {
             assert_eq!(
                 t.count_splits(case.as_bytes()),
                 scalar_count_splits(case.as_bytes()),

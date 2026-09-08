@@ -18,7 +18,7 @@ let tokens = t.count("The quick brown fox jumps over the lazy dog.");
 | `TokenCounter` | Trait abstracting token counting backends (`count`, `backend_name`). |
 | `SimdWhitespaceTokenizer` | SWAR byte-scan for whitespace boundaries + BPE-approximate blend. |
 | `TokenEstimator` | Enum dispatching to the best available backend. |
-| `TiktokenCounter` | Exact `cl100k_base` counting (feature `tiktoken`, off by default). |
+| `TiktokenCounter` | Exact `cl100k_base` and `o200k_base` counting (feature `tiktoken`, off by default). |
 
 ## The "SIMD" in the name, honestly
 
@@ -54,14 +54,27 @@ tokenizer table.
 ## Features
 
 - `tiktoken` (default **off**, keeps the dependency tree light) — adds
-  `TiktokenCounter` for exact `cl100k_base` counts and makes
-  `TokenEstimator::new` prefer it. Gated off on `wasm32` like clawdius.
+  `TiktokenCounter` for exact `cl100k_base` (`TiktokenCounter::new`) and
+  `o200k_base` (`TiktokenCounter::o200k`) counts and makes
+  `TokenEstimator::new` prefer tiktoken. Gated off on `wasm32` like clawdius.
 
 ```toml
 simd-tokenizer = "0.1"
 # or with exact counting:
 simd-tokenizer = { version = "0.1", features = ["tiktoken"] }
 ```
+
+```rust
+use simd_tokenizer::{TiktokenCounter, TokenCounter};
+
+let t = TiktokenCounter::o200k().expect("o200k_base loads");
+assert_eq!(t.count("hello world"), 2);
+// o200k is markedly cheaper on emoji / non-Latin scripts than cl100k_base.
+assert_eq!(t.count("🌍"), 2);
+```
+
+Counting uses `CoreBPE::encode_ordinary`, so special-token strings
+(`<|endoftext|>` and friends) are counted as the ordinary text they are.
 
 ## Guarantees
 
@@ -75,9 +88,13 @@ simd-tokenizer = { version = "0.1", features = ["tiktoken"] }
 
 ## Testing
 
-- 37 unit tests ported/derived from clawdius's `tokenizer/` module.
+- 45 unit tests ported/derived from clawdius's `tokenizer/` module plus the
+  tiktoken backends (32 build core-only; the tiktoken-backend tests are
+  behind the `tiktoken` feature).
 - Integration tests: trait-object usage, estimator dispatch, blend
-  monotonicity; feature-gated tiktoken exactness tests.
+  monotonicity; feature-gated tiktoken exactness tests for `cl100k_base` and
+  `o200k_base` (including pinned cross-encoding divergence on emoji and
+  multilingual samples).
 - Property tests (`proptest`): determinism, nondecreasing counts under
   append, no-panic on arbitrary bytes/text, SWAR≡scalar equivalence.
 - Run: `cargo test` (add `--features tiktoken` for the exact backend tests).

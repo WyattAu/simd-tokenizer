@@ -13,7 +13,7 @@
 //! | [`TokenCounter`] | Trait abstracting token counting backends. |
 //! | [`SimdWhitespaceTokenizer`] | SWAR byte-scan for whitespace boundaries. |
 //! | [`TokenEstimator`] | Enum dispatching to the best available backend. |
-//! | [`TiktokenCounter`] | Exact `cl100k_base` counting (feature `tiktoken`). |
+//! | [`TiktokenCounter`] | Exact `cl100k_base` / `o200k_base` counting (feature `tiktoken`). |
 //!
 //! # The "SIMD" in the name, honestly
 //!
@@ -46,7 +46,9 @@
 //! # Feature flags
 //!
 //! - `tiktoken` (default **off**) — adds [`TiktokenCounter`] for exact
-//!   `cl100k_base` counts and makes [`TokenEstimator::new`] prefer it.
+//!   `cl100k_base` and `o200k_base` counts ([`TiktokenCounter::new`] and
+//!   [`TiktokenCounter::o200k`]) and makes [`TokenEstimator::new`] prefer
+//!   tiktoken (`cl100k_base`).
 //!
 //! # Guarantees
 //!
@@ -101,6 +103,11 @@ pub fn estimate_from_whitespace_splits(splits: usize, byte_len: usize) -> usize 
 ///
 /// With the `tiktoken` feature enabled (on non-WASM targets) this wraps a
 /// [`TiktokenCounter`]; otherwise it uses [`SimdWhitespaceTokenizer`].
+// `SimdWhitespaceTokenizer` is a zero-sized type, so the tiktoken variant is
+// inherently ~200+ bytes larger (CoreBPE's tables state). Boxing would
+// allocate on every construction for no real benefit; the size is bounded and
+// known.
+#[allow(clippy::large_enum_variant)]
 #[derive(Debug)]
 pub enum TokenEstimator {
     /// Exact counting via tiktoken-rs (cl100k_base).
@@ -137,6 +144,13 @@ impl TokenEstimator {
     pub fn try_new_tiktoken() -> Result<Self, TiktokenError> {
         Ok(Self::Tiktoken(TiktokenCounter::new()?))
     }
+
+    /// Fallibly construct an o200k_base-backed estimator (only available with
+    /// the `tiktoken` feature on non-WASM targets).
+    #[cfg(all(not(target_arch = "wasm32"), feature = "tiktoken"))]
+    pub fn try_new_tiktoken_o200k() -> Result<Self, TiktokenError> {
+        Ok(Self::Tiktoken(TiktokenCounter::o200k()?))
+    }
 }
 
 impl Default for TokenEstimator {
@@ -157,8 +171,8 @@ impl TokenCounter for TokenEstimator {
     fn backend_name(&self) -> &'static str {
         match self {
             #[cfg(all(not(target_arch = "wasm32"), feature = "tiktoken"))]
-            Self::Tiktoken(_) => "tiktoken(cl100k_base)",
-            Self::Simd(_) => "simd-whitespace",
+            Self::Tiktoken(t) => t.backend_name(),
+            Self::Simd(s) => s.backend_name(),
         }
     }
 }

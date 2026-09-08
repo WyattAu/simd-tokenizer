@@ -46,5 +46,29 @@ fn bench_count_splits(c: &mut Criterion) {
     group.finish();
 }
 
+// Exact backends (feature "tiktoken"): cl100k_base and o200k_base counting.
+#[cfg(all(not(target_arch = "wasm32"), feature = "tiktoken"))]
+fn bench_tiktoken(c: &mut Criterion) {
+    use simd_tokenizer::TiktokenCounter;
+
+    let cl100k = TiktokenCounter::new().expect("cl100k_base init");
+    let o200k = TiktokenCounter::o200k().expect("o200k_base init");
+    let mut group = c.benchmark_group("tiktoken");
+    for n in [1usize, 100, 1000] {
+        let text = text_of(n);
+        group.throughput(Throughput::Bytes(text.len() as u64));
+        group.bench_function(format!("cl100k_{n}w"), |b| {
+            b.iter(|| black_box(cl100k.count(black_box(&text))))
+        });
+        group.bench_function(format!("o200k_{n}w"), |b| {
+            b.iter(|| black_box(o200k.count(black_box(&text))))
+        });
+    }
+    group.finish();
+}
+
+#[cfg(all(not(target_arch = "wasm32"), feature = "tiktoken"))]
+criterion_group!(benches, bench_count, bench_count_splits, bench_tiktoken);
+#[cfg(not(all(not(target_arch = "wasm32"), feature = "tiktoken")))]
 criterion_group!(benches, bench_count, bench_count_splits);
 criterion_main!(benches);

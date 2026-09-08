@@ -83,3 +83,49 @@ fn test_tiktoken_never_panics_on_unicode() {
         let _ = t.count(text); // must not panic
     }
 }
+
+#[cfg(all(not(target_arch = "wasm32"), feature = "tiktoken"))]
+#[test]
+fn test_o200k_trait_object_usage() {
+    let counter: Box<dyn TokenCounter> =
+        Box::new(simd_tokenizer::TiktokenCounter::o200k().expect("o200k init"));
+    assert_eq!(counter.backend_name(), "tiktoken(o200k_base)");
+    assert_eq!(counter.count(""), 0);
+    assert!(counter.count("hello world") >= 1);
+}
+
+#[cfg(all(not(target_arch = "wasm32"), feature = "tiktoken"))]
+#[test]
+fn test_o200k_estimator_dispatch() {
+    let e = simd_tokenizer::TokenEstimator::try_new_tiktoken_o200k().expect("o200k init");
+    assert_eq!(e.backend_name(), "tiktoken(o200k_base)");
+    assert!(e.count("hello world") >= 1);
+}
+
+#[cfg(all(not(target_arch = "wasm32"), feature = "tiktoken"))]
+#[test]
+fn test_o200k_matches_cl100k_on_english() {
+    // For plain ASCII English the two vocabularies mostly agree on these
+    // canonical samples; divergence is pinned on emoji/multilingual in the
+    // backend unit tests.
+    let cl = simd_tokenizer::TiktokenCounter::new().expect("cl100k init");
+    let o2 = simd_tokenizer::TiktokenCounter::o200k().expect("o200k init");
+    assert_eq!(cl.count("hello world"), o2.count("hello world"));
+    assert_eq!(cl.count(""), o2.count(""));
+}
+
+#[cfg(all(not(target_arch = "wasm32"), feature = "tiktoken"))]
+#[test]
+fn test_o200k_never_panics_on_unicode() {
+    let t = simd_tokenizer::TiktokenCounter::o200k().expect("o200k init");
+    let texts = [
+        "🌍",
+        "こんにちは世界",
+        "mixed 🌍 こんにちは text",
+        "\u{0}\u{1}\u{7f}",
+        &"a".repeat(10_000),
+    ];
+    for text in &texts {
+        let _ = t.count(text); // must not panic
+    }
+}
