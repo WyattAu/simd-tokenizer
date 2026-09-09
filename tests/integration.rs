@@ -1,5 +1,8 @@
 //! Integration tests: trait-object usage, estimator dispatch, and
 //! (feature-gated) tiktoken backend behavior.
+//
+// Test code: unwrap/expect are the idiomatic way to assert outcomes.
+#![allow(clippy::unwrap_used, clippy::expect_used)]
 
 use simd_tokenizer::{
     estimate_from_whitespace_splits, SimdWhitespaceTokenizer, TokenCounter, TokenEstimator,

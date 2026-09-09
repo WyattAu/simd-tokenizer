@@ -82,6 +82,8 @@ impl TokenCounter for TiktokenCounter {
 }
 
 #[cfg(test)]
+// Test code: expect is the idiomatic way to assert setup success.
+#[allow(clippy::expect_used)]
 mod tests {
     use super::*;
 

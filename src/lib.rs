@@ -128,6 +128,9 @@ impl TokenEstimator {
     pub fn new() -> Self {
         #[cfg(all(not(target_arch = "wasm32"), feature = "tiktoken"))]
         {
+            // Documented panic: `new()` is the infallible-by-contract
+            // constructor; fallible callers use `try_new_tiktoken`.
+            #[allow(clippy::expect_used)]
             Self::Tiktoken(
                 TiktokenCounter::new().expect("failed to initialise cl100k_base tokenizer"),
             )

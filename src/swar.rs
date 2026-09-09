@@ -74,6 +74,9 @@ fn count_splits_swar(data: &[u8]) -> usize {
 
     let mut chunks = data.chunks_exact(8);
     for chunk in &mut chunks {
+        // `chunks_exact(8)` guarantees every chunk is exactly 8 bytes, so
+        // the conversion cannot fail.
+        #[allow(clippy::expect_used)]
         let word = u64::from_le_bytes(chunk.try_into().expect("chunks_exact yields 8 bytes"));
         let nonws = nonwhitespace_mask(word); // 0x80 per non-whitespace byte
         let ws = !nonws & HIGH; // 0x80 per whitespace byte
