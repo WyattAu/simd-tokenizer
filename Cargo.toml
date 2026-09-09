@@ -1,4 +1,5 @@
 [package]
+exclude = ["/target"]
 name = "simd-tokenizer"
 version = "0.1.1"
 edition = "2021"
@@ -33,3 +34,7 @@ harness = false
 [dev-dependencies]
 proptest = "1"
 criterion = { version = "0.5", features = ["html_reports"] }
+
+[lints.clippy]
+unwrap_used = "warn"
+expect_used = "warn"
