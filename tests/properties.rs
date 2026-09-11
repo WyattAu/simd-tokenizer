@@ -59,6 +59,6 @@ proptest! {
     #[test]
     fn prop_splits_at_most_one_per_byte(bytes in proptest::collection::vec(any::<u8>(), 0..4096)) {
         let splits = SimdWhitespaceTokenizer::new().count_splits(&bytes);
-        prop_assert!(splits <= bytes.len().max(0) + 1);
+        prop_assert!(splits <= bytes.len() + 1);
     }
 }

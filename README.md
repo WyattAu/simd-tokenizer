@@ -1,5 +1,9 @@
 # simd-tokenizer
 
+[![docs.rs](https://docs.rs/simd-tokenizer/badge.svg)](https://docs.rs/simd-tokenizer)
+[![crates.io](https://img.shields.io/crates/v/simd-tokenizer.svg)](https://crates.io/crates/simd-tokenizer)
+[![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue.svg)](LICENSE)
+
 Safe, SIMD-style (SWAR) whitespace token estimator with an optional exact
 tiktoken backend — extracted from
 [clawdius](https://github.com/WyattAu/clawdius).
