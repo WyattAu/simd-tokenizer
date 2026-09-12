@@ -1,7 +1,7 @@
 [package]
 exclude = ["/target"]
 name = "simd-tokenizer"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 rust-version = "1.85"
 authors = ["Wyatt Au <wyatt_au@protonmail.com>"]
@@ -31,9 +31,17 @@ tiktoken-rs = { version = "0.12", optional = true }
 name = "count"
 harness = false
 
+# Deterministic CI perf gate (instruction counts under valgrind). Not run
+# locally unless valgrind is installed; see benches/iai_hot_path.rs.
+[[bench]]
+name = "iai_hot_path"
+harness = false
+
 [dev-dependencies]
 proptest = "1"
 criterion = { version = "0.5", features = ["html_reports"] }
+# Deterministic CI perf gate (instruction counts; needs valgrind to run).
+iai-callgrind = "0.16"
 
 [lints.clippy]
 unwrap_used = "warn"

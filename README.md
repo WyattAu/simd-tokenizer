@@ -84,9 +84,11 @@ Counting uses `CoreBPE::encode_ordinary`, so special-token strings
 
 - `#![forbid(unsafe_code)]` — including the SIMD-style scan.
 - `#![deny(missing_docs)]`.
-- Deterministic, allocation-free, never panics on any input — verified by
-  property tests over arbitrary byte strings (any bit pattern, including
-  invalid/truncated UTF-8) and arbitrary UTF-8 text.
+- Deterministic, allocation-free, never panics on any input — the
+  allocation-free claim is **proven by a counting-allocator test**
+  (`tests/zero_alloc_count.rs`, runs on every `cargo test`), and
+  determinism/no-panic by property tests over arbitrary byte strings (any
+  bit pattern, including invalid/truncated UTF-8) and arbitrary UTF-8 text.
 - The SWAR path is property-tested byte-for-byte against the scalar
   reference (`scalar_count_splits`), covering every chunk-boundary alignment.
 
@@ -109,4 +111,8 @@ Apache-2.0 (matching clawdius).
 
 ## Performance
 
-Measured hot-path SLOs and allocation profile: [PERF-SLO.md](PERF-SLO.md). Benchmarks run in CI (non-gating regression visibility against the saved `ci` baseline).
+Measured hot-path SLOs and allocation profile: [PERF-SLO.md](PERF-SLO.md),
+with every numeric claim mapped to its proof artifact in
+[CLAIMS.md](CLAIMS.md). The hot loop is pinned by an iai-callgrind
+instruction gate (`benches/iai_hot_path.rs`); the allocation-free claim is
+proven by `tests/zero_alloc_count.rs`.

@@ -5,6 +5,26 @@ Changelog](https://keepachangelog.com/) — versions follow [semver](https://sem
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-09-12
+
+### Added
+
+- **Claims proof-back** ([CLAIMS.md](CLAIMS.md)): every numeric performance
+  claim in README/PERF-SLO mapped to its proof artifact.
+- `tests/zero_alloc_count.rs` — counting-allocator proof of the
+  "0 allocations per `count`" claim (previously code-reading only): delta =
+  0 over repeated `count`/`count_splits` on small, large, and
+  boundary-shaped inputs.
+- `benches/iai_hot_path.rs` — iai-callgrind instruction gate for the SWAR
+  hot loop: `count` at 100/1000 words, `count_splits` at 1000 words
+  (10 814 instructions per ~4.5 KB scan; CI-gated, needs valgrind to run
+  locally).
+
+### Changed
+
+- PERF-SLO.md allocation profile upgraded from "code reading" to "proven"
+  with test references.
+
 ## [0.1.1] - 2026-09-08
 
 ### Added
