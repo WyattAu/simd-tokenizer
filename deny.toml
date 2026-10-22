@@ -6,6 +6,16 @@ all-features = true
 
 [advisories]
 version = 2
+# Held on purpose — transitive unmaintained-crate advisories, unfixable
+# from this repo:
+# - RUSTSEC-2025-0141 (bincode 1.x) — unmaintained; the 2.x rewrite is
+#   incompatible with the consumers that pull it.
+# - RUSTSEC-2026-0173 (proc-macro-error2) — unmaintained; successor exists
+#   upstream but the dependents have not moved.
+ignore = [
+  "RUSTSEC-2025-0141",
+  "RUSTSEC-2026-0173",
+]
 yanked = "deny"
 
 [licenses]
