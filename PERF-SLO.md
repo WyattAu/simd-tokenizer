@@ -1,4 +1,4 @@
-# Performance SLOs — simd-tokenizer
+# Performance SLOs: simd-tokenizer
 
 Every numeric claim in this file and the README is inventoried against its
 proof artifact in [CLAIMS.md](CLAIMS.md).
@@ -36,7 +36,7 @@ the saved `ci` baseline).
   boundary-shaped inputs. The `tiktoken` feature backend is a separate
   exact-count path and is not covered by this claim.
 - Instruction-count gate: `cargo bench --bench iai_hot_path` (iai-callgrind;
-  CI-only) pins the SWAR hot loop — 10 814 instructions per ~4.5 KB `count`
+  CI-only) pins the SWAR hot loop: 10 814 instructions per ~4.5 KB `count`
   (the 4.1 GB/s regime), reproducible for a given binary.
 
 ## Regression policy

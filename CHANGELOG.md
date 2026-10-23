@@ -1,7 +1,7 @@
 # Changelog
 
 All notable changes to this project are documented here. Format: [Keep a
-Changelog](https://keepachangelog.com/) — versions follow [semver](https://semver.org).
+Changelog](https://keepachangelog.com/): versions follow [semver](https://semver.org).
 
 ## [Unreleased]
 
@@ -11,11 +11,11 @@ Changelog](https://keepachangelog.com/) — versions follow [semver](https://sem
 
 - **Claims proof-back** ([CLAIMS.md](CLAIMS.md)): every numeric performance
   claim in README/PERF-SLO mapped to its proof artifact.
-- `tests/zero_alloc_count.rs` — counting-allocator proof of the
+- `tests/zero_alloc_count.rs`: counting-allocator proof of the
   "0 allocations per `count`" claim (previously code-reading only): delta =
   0 over repeated `count`/`count_splits` on small, large, and
   boundary-shaped inputs.
-- `benches/iai_hot_path.rs` — iai-callgrind instruction gate for the SWAR
+- `benches/iai_hot_path.rs`: iai-callgrind instruction gate for the SWAR
   hot loop: `count` at 100/1000 words, `count_splits` at 1000 words
   (10 814 instructions per ~4.5 KB scan; CI-gated, needs valgrind to run
   locally).

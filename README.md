@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue.svg)](LICENSE)
 
 Safe, SIMD-style (SWAR) whitespace token estimator with an optional exact
-tiktoken backend — extracted from
+tiktoken backend: extracted from
 [clawdius](https://github.com/WyattAu/clawdius).
 
 ```rust
@@ -37,14 +37,14 @@ Measured on a 1.09 MB English text (`i9-class laptop`, release build):
 
 | path | per call | vs SWAR |
 | --- | --- | --- |
-| SWAR scan (`count_splits`) | 1.17 ms | — |
+| SWAR scan (`count_splits`) | 1.17 ms |baseline||
 | branchy scalar reference | 5.79 ms | 5.0× slower |
 | `str::split_whitespace().count()` | 11.1 ms | 9.5× slower |
 
 So: several times faster than the naive paths, ~1 GB/s, but **not** as fast
 as hand-written SSE2/AVX2 for huge buffers (SWAR moves 8 bytes per step vs
-16-32 for vector ISAs). For token *estimation* granularity — the result
-feeds a budgeting heuristic, not an invoice — this trade is usually
+16-32 for vector ISAs). For token *estimation* granularity: the result
+feeds a budgeting heuristic, not an invoice: this trade is usually
 invisible end-to-end.
 
 ## Estimate semantics
@@ -57,7 +57,7 @@ tokenizer table.
 
 ## Features
 
-- `tiktoken` (default **off**, keeps the dependency tree light) — adds
+- `tiktoken` (default **off**, keeps the dependency tree light): adds
   `TiktokenCounter` for exact `cl100k_base` (`TiktokenCounter::new`) and
   `o200k_base` (`TiktokenCounter::o200k`) counts and makes
   `TokenEstimator::new` prefer tiktoken. Gated off on `wasm32` like clawdius.
@@ -82,9 +82,9 @@ Counting uses `CoreBPE::encode_ordinary`, so special-token strings
 
 ## Guarantees
 
-- `#![forbid(unsafe_code)]` — including the SIMD-style scan.
+- `#![forbid(unsafe_code)]`: including the SIMD-style scan.
 - `#![deny(missing_docs)]`.
-- Deterministic, allocation-free, never panics on any input — the
+- Deterministic, allocation-free, never panics on any input: the
   allocation-free claim is **proven by a counting-allocator test**
   (`tests/zero_alloc_count.rs`, runs on every `cargo test`), and
   determinism/no-panic by property tests over arbitrary byte strings (any

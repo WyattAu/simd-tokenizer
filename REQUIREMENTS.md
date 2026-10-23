@@ -1,4 +1,4 @@
-# Requirements — simd-tokenizer
+# Requirements: simd-tokenizer
 
 Numbered, testable requirements. Every requirement maps to at least one named
 test; every security-relevant test cites at least one requirement. Threat
@@ -24,8 +24,8 @@ feature, plus the `TokenEstimator` dispatch enum.
 
 | ID | Requirement | Priority |
 |----|-------------|----------|
-| REQ-ST-100 | No panic on arbitrary or hostile input — empty strings, emoji-heavy text, control characters, truncated UTF-8, and oversized inputs return counts (T1, T3) | MUST |
-| REQ-ST-101 | SWAR must never diverge from scalar semantics — divergence would misclassify token budgets (T2); pinned by property test | MUST |
+| REQ-ST-100 | No panic on arbitrary or hostile input: empty strings, emoji-heavy text, control characters, truncated UTF-8, and oversized inputs return counts (T1, T3) | MUST |
+| REQ-ST-101 | SWAR must never diverge from scalar semantics: divergence would misclassify token budgets (T2); pinned by property test | MUST |
 | REQ-ST-102 | Estimate-vs-exact cannot be silently swapped: `backend_name` makes the active backend observable so callers can assert exactness (T4) | SHOULD |
 | REQ-ST-103 | Construction failure of the tiktoken tables surfaces as `TiktokenError`, never a panic (T5) | MUST |
 | REQ-ST-104 | Byte- and word-boundary alignment (16/32/33-byte inputs) must not change results (alignment edge cases in the SWAR reader) | MUST |
