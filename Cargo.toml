@@ -1,7 +1,7 @@
 [package]
 exclude = ["/target"]
 name = "simd-tokenizer"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 rust-version = "1.85"
 authors = ["Wyatt Au <wyatt_au@protonmail.com>"]
@@ -9,7 +9,7 @@ license = "Apache-2.0"
 repository = "https://github.com/WyattAu/simd-tokenizer"
 homepage = "https://github.com/WyattAu/simd-tokenizer"
 documentation = "https://docs.rs/simd-tokenizer"
-description = "Safe SWAR-accelerated whitespace token estimator with an optional exact tiktoken (cl100k_base, o200k_base) backend."
+description = "Safe SWAR-accelerated whitespace token estimator with optional exact tiktoken backend"
 readme = "README.md"
 keywords = ["tokenizer", "tokens", "simd", "llm", "tiktoken"]
 categories = ["text-processing"]
