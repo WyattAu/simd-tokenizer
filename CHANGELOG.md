@@ -52,6 +52,24 @@ Changelog](https://keepachangelog.com/): versions follow [semver](https://semver
   to compile the `swar` unit tests under `no_std` (CI never caught it because
   it builds with `--all-features`).
 
+## [1.0.0] - 2026-10-29
+
+### Declared stable
+
+First 1.0. `simd-tokenizer` estimates production token counts; this release commits the SWAR whitespace scan, the estimator surface, and the optional exact-tiktoken backend selection as API-stable.
+
+### Guarantees from here on
+
+- Breaking changes to public items require a minor bump plus a `#[deprecated]`
+  window of at least one minor release.
+- MSRV bumps are minor releases, not patch releases.
+- `#![deny(missing_docs)]` and `#![forbid(unsafe_code)]` are enforced.
+- The SWAR estimator is deterministic: identical input yields identical counts on any 1.x release.
+
+### Explicitly not guaranteed
+
+- Estimator and exact-tiktoken counts are different by design; which one you get stays governed by the feature flag, never by a patch release.
+
 ## [0.1.0] - 2026-09-04
 
 ### Added

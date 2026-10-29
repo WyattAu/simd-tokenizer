@@ -105,6 +105,13 @@ Counting uses `CoreBPE::encode_ordinary`, so special-token strings
   append, no-panic on arbitrary bytes/text, SWAR≡scalar equivalence.
 - Run: `cargo test` (add `--features tiktoken` for the exact backend tests).
 
+## Stability
+
+`simd-tokenizer` is 1.0. Breaking changes require a minor bump and a `#[deprecated]`
+window of at least one minor release; MSRV bumps are minor releases, never
+patch releases. `missing_docs` is denied and `unsafe` is forbidden. See the
+changelog for the short list of explicitly non-contractual behaviours.
+
 ## License
 
 Apache-2.0 (matching clawdius).
